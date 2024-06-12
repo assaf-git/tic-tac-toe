@@ -29,7 +29,7 @@ function gameBoard() {
 }
 
 function cell() {
-    let value = "";
+    let value = 0;
 
     const addPiece = (player) => {
         value = player;
