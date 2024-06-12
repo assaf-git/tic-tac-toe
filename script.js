@@ -27,3 +27,18 @@ function gameBoard() {
 
     return (getBoards, dropPiece, printBoard);
 }
+
+function cell() {
+    let value = "";
+
+    const addPiece = (player) => {
+        value = player;
+    };
+
+    const getValue = () => value;
+
+    return {
+        addPiece,
+        getValue
+    };
+}
