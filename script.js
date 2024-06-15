@@ -42,3 +42,52 @@ function cell() {
         getValue
     };
 }
+
+function gameController(
+    playerOneName = "Player One",
+    playerTwoName = "Player Two"
+    ) {
+    const board = gameBoard();
+    const players = [
+        {
+            name: playerOneName,
+            piece: 1
+        },
+        {
+            name: playerTwoName,
+            piece: 2
+        }
+    ];
+
+    let activePlayer = players[0];
+
+    const switchPlayerTurn = () => {
+        activePlayer = activePlayer === players[0] ? players[1] : players[0];
+    };
+
+    const getActivePlayer = () => activePlayer;
+
+    const printNewRound = () => {
+        board.printBoard();
+        console.log(`${getActivePlayer().name}'s turn.`)
+    };
+
+    const playRound = (cell) => {
+        console.log(`Dropping ${getActivePlayer().name}'s piece into cell ${cell}...`);
+        board.dropPiece(cell, getActivePlayer().piece);
+
+        // win check
+
+        switchPlayerTurn();
+        printNewRound();
+    };
+
+    printNewRound();
+
+    return {
+        playRound,
+        getActivePlayer
+    };
+}
+
+const game = gameController();
