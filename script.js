@@ -10,7 +10,7 @@ function gameBoard() {
         }
     }
 
-    const getBoards = () => board;
+    const getBoard = () => board;
 
     const dropPiece = (cell, player) => {
         const availableCells = () => board.filter((row) => row[cell].getValue() === 0).map(row => row[cell]);
@@ -25,7 +25,7 @@ function gameBoard() {
         console.log(boardWithCellValues);
     }
 
-    return {getBoards, dropPiece, printBoard};
+    return {getBoard, dropPiece, printBoard};
 }
 
 function cell() {
@@ -86,8 +86,46 @@ function gameController(
 
     return {
         playRound,
-        getActivePlayer
+        getActivePlayer,
+        getBoard: board.getBoard
     };
 }
 
-const game = gameController();
+function screenController() {
+    const game = gameController();
+    const playerTurnDiv = document.querySelector(".turn");
+    const boardDiv = document.querySelector(".board");
+
+    const updateScreen = () => {
+        boardDiv.textContent = "";
+
+        const board = game.getBoard();
+        const activePlayer = game.getActivePlayer();
+
+        playerTurnDiv.textContent = `${activePlayer.name}'s turn...`
+
+        board.forEach(row => {
+            row.forEach((cell, index) => {
+                const cellButton = document.createElement("button");
+                cellButton.classList.add("cell");
+                cellButton.dataset.cell = index
+                cellButton.textContent = cell.getValue();
+                boardDiv.appendChild(cellButton);
+            });
+        });
+    }
+
+    function clickHandlerBoard(e) {
+        const selectedColumn = e.target.dataset.cell;
+
+        if (!selectedColumn) return;
+
+        game.playRound(selectedColumn);
+        updateScreen();
+    }
+    boardDiv.addEventListener("click", clickHandlerBoard);
+
+    updateScreen();
+}
+
+screenController();
