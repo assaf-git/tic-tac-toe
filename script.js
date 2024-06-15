@@ -25,7 +25,7 @@ function gameBoard() {
         console.log(boardWithCellValues);
     }
 
-    return (getBoards, dropPiece, printBoard);
+    return {getBoards, dropPiece, printBoard};
 }
 
 function cell() {
