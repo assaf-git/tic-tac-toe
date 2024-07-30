@@ -15,3 +15,19 @@ const gameBoard = (() => {
         console.log(board[i].join(" "));
     }    
 })();
+
+const gameController = ((
+    playerOneName = "Player One",
+    playerTwoName = "Player Two"
+) => {
+    const players   = [
+        {
+            name: playerOneName,
+            piece: "X"
+        },
+        {
+            name: playerTwoName,
+            piece:"O"
+        }
+    ];
+})();
