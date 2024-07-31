@@ -1,31 +1,22 @@
-const gameBoard = (() => {
+const gameBoard = () => {
     const rows = 3;
     const columns = 3;
     const board = [];
-    
-    let k = 1;
-    
+        
     for (i = 0; i < rows; i++) {
         board[i] = [];
         for (j = 0; j < columns; j++) {
-            board[i].push(k);
-            // console.log(k);
-            k++;
+            board[i].push(cell());
         };
-        console.log(board[i].join(" "));
     }    
 
     const printBoard = () => {
         const boardWithCellValues = board.map((row) => row.map((cell) => cell.getValue()));
-        // const boardWithCellValues = board.map((row) => row.map((cell) => cell.values()));
-        // const boardWithCellValues = board.map((row) => row.values());
         console.log(boardWithCellValues);
     }
 
-    // printBoard();
-
     return {printBoard};
-})();
+}
 
 const cell = () => {
     let value = 0;
@@ -46,6 +37,9 @@ const gameController = ((
     playerOneName = "Player One",
     playerTwoName = "Player Two"
 ) => {
+
+    const board = gameBoard();
+
     const players   = [
         {
             name: playerOneName,
@@ -63,5 +57,7 @@ const gameController = ((
         activePlayer = activePlayer === players[0] ? players[1] : players[0];
     }
     const getActivePlayer = () => activePlayer;
+
+    board.printBoard();
 
 })();
