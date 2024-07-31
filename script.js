@@ -63,6 +63,16 @@ const gameController = ((
         console.log(`${getActivePlayer().name}'s turn.`);
     }
 
-    printNewRound();
+    const playRound = (cell) => {
+        console.log(`Dropping ${getActivePlayer().name}'s token into cell ${cell}...`);
+        board.dropPiece(cell, getActivePlayer().piece);
 
+        // win check
+
+        switchPlayerTurn();
+        printNewRound();
+    }
+
+    printNewRound();
+    // playRound();
 })();
