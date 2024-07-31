@@ -71,10 +71,12 @@ const gameController = ((
 
     const printNewRound = () => {
         board.printBoard();
-        console.log(`${getActivePlayer().name}'s turn.`);
+        // console.log(`${getActivePlayer().name}'s turn.`);
+        // playRound();
     }
 
     const playRound = (cell) => {
+        cell = prompt(`${getActivePlayer().name}'s turn.`);
         console.log(`Dropping ${getActivePlayer().name}'s token into cell ${cell}...`);
         board.dropPiece(cell, getActivePlayer().piece);
 
