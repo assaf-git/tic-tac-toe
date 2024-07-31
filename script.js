@@ -17,11 +17,30 @@ const gameBoard = (() => {
 
     const printBoard = () => {
         const boardWithCellValues = board.map((row) => row.map((cell) => cell.getValue()));
+        // const boardWithCellValues = board.map((row) => row.map((cell) => cell.values()));
+        // const boardWithCellValues = board.map((row) => row.values());
         console.log(boardWithCellValues);
     }
 
+    // printBoard();
+
     return {printBoard};
 })();
+
+const cell = () => {
+    let value = 0;
+
+    const addPiece = (player) => {
+        value = player;
+    }
+
+    const getValue = () => value;
+
+    return {
+        addPiece,
+        getValue
+    };
+}
 
 const gameController = ((
     playerOneName = "Player One",
