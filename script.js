@@ -2,25 +2,77 @@ const gameBoard = () => {
     const rows = 3;
     const columns = 3;
     const board = [];
+    let k = 1;
+    // let executed = false;
         
     for (i = 0; i < rows; i++) {
         board[i] = [];
         for (j = 0; j < columns; j++) {
-            board[i].push(cell());
+            board[i].push(k);
+            k++
         };
+        console.log(board[i]);
     }
+    console.log(board);
 
     const dropPiece = (cell, player) => {
-        const availableCells = board.filter((row) => row.map((cell) => cell.getValue()) === 0).map((row) => row[cell]);
+        const availableCells = board.filter((row) => row.map((cell) => cell.getValue()) === 1).map((row) => row[cell]);
         
-        if (!availableCells.length) return;
-        
+        console.log(board);
+        console.log(availableCells);
+
+        // if (!availableCells.length) return;
+
+        console.log(cell());
         board[cell].addPiece(player);
     }
 
     const printBoard = () => {
+        
         const boardWithCellValues = board.map((row) => row.map((cell) => cell.getValue()));
         console.log(boardWithCellValues);
+
+        // if (executed === false) {
+        //     const boardWithCellValues = board.map((row) => row.map((cell) => cell.getValue()));
+        //     executed = true;
+        //     let cellNumber = 0;
+        //     boardWithCellValues.forEach(function(item){
+        //         item.forEach(function(cell, index, array){
+        //             if (cell === 0) {
+        //                 array[index] = cellNumber + 1;
+        //                 cellNumber++;
+        //             }
+        //         })         
+        //     });
+        //     for (let i = 0; i < boardWithCellValues.length; i++) {
+        //         console.log(boardWithCellValues[i]);
+        //     }
+        // } else {
+        //     const boardWithCellValues = board.map((row) => row.map((cell) => cell.getValue()));
+        //     console.log(boardWithCellValues);
+        // }
+
+        // const initialPrint = (() => {
+        //     return (() => {
+        //         if (!executed) {
+        //             executed = true;
+        //             let cellNumber = 0;
+        //             boardWithCellValues.forEach(function(item){
+        //                 item.forEach(function(cell, index, array){
+        //                     if (cell === 0) {
+        //                         array[index] = cellNumber + 1;
+        //                         cellNumber++;
+        //                     }
+        //                 })         
+        //             });
+        //             for (let i = 0; i < boardWithCellValues.length; i++) {
+        //                 console.log(boardWithCellValues[i]);
+        //             }
+        //         }
+        //     })();
+        // })();
+
+        
     }
 
     return {
@@ -30,7 +82,7 @@ const gameBoard = () => {
 }
 
 const cell = () => {
-    let value = 0;
+    let value = 1;
 
     const addPiece = (player) => {
         value = player;
@@ -71,8 +123,8 @@ const gameController = ((
 
     const printNewRound = () => {
         board.printBoard();
-        // console.log(`${getActivePlayer().name}'s turn.`);
-        // playRound();
+        console.log(`${getActivePlayer().name}'s turn.`);
+        playRound();
     }
 
     const playRound = (cell) => {
