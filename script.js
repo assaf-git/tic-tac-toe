@@ -16,20 +16,30 @@ const gameBoard = () => {
     console.log(board);
 
     const dropPiece = (cell, player) => {
-        const availableCells = board.filter((row) => row.map((cell) => cell.getValue()) === 1).map((row) => row[cell]);
+        // const availableCells = board.filter((row) => row.map((cell) => cell.getValue()) === 1).map((row) => row[cell]);
         
-        // const boardWithCellValues = board.map((row) => row.map((cell) => {
-        //     if (cell > 0 || cell <= 9) {
+        const availableCells = board.filter((row) => row.map((cell) => {cell > 0 || cell <= 9}));
 
-        //     }}));
-
-        console.log(board);
         console.log(availableCells);
 
-        // if (!availableCells.length) return;
 
-        console.log(cell());
-        board[cell].addPiece(player);
+        // const availableCells = board.filter((row) => row.map((cell) => {
+        //     if (cell > 0 || cell <= 9) {
+        //         console.log(availableCells);
+        //     }}));
+
+        // if (!availableCells.length) return;
+        const cellWithPiece = availableCells
+        cellWithPiece.forEach((row) => {
+            row.forEach((item, index, array) => {
+                if (item === Number(cell)) {
+                    array[index] = player;
+                }
+            })
+        });
+        // const cellWithPiece = board.map((row) => row.map((cell) => board[cell].push(player)));
+        // board[cell].push(player);
+        console.log(cellWithPiece);
     }
 
     const printBoard = () => {
