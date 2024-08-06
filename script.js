@@ -18,6 +18,11 @@ const gameBoard = () => {
     const dropPiece = (cell, player) => {
         const availableCells = board.filter((row) => row.map((cell) => cell.getValue()) === 1).map((row) => row[cell]);
         
+        // const boardWithCellValues = board.map((row) => row.map((cell) => {
+        //     if (cell > 0 || cell <= 9) {
+
+        //     }}));
+
         console.log(board);
         console.log(availableCells);
 
@@ -31,10 +36,6 @@ const gameBoard = () => {
         
         const boardWithCellValues = board.map((row) => row.map((cell) => cell));
 
-        // const boardWithCellValues = board.map((row) => row.map((cell) => {
-        //     if (cell > 0 || cell <= 9) {
-
-        //     }}));
         console.log(boardWithCellValues);
 
         // if (executed === false) {
