@@ -29,7 +29,12 @@ const gameBoard = () => {
 
     const printBoard = () => {
         
-        const boardWithCellValues = board.map((row) => row.map((cell) => cell.getValue()));
+        const boardWithCellValues = board.map((row) => row.map((cell) => cell));
+
+        // const boardWithCellValues = board.map((row) => row.map((cell) => {
+        //     if (cell > 0 || cell <= 9) {
+
+        //     }}));
         console.log(boardWithCellValues);
 
         // if (executed === false) {
