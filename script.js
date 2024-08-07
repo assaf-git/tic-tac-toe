@@ -3,7 +3,6 @@ const gameBoard = () => {
     const columns = 3;
     const board = [];
     let k = 1;
-    // let executed = false;
         
     for (i = 0; i < rows; i++) {
         board[i] = [];
@@ -11,84 +10,24 @@ const gameBoard = () => {
             board[i].push(k);
             k++
         };
-        console.log(board[i]);
     }
-    console.log(board);
 
     const dropPiece = (cell, player) => {
-        // const availableCells = board.filter((row) => row.map((cell) => cell.getValue()) === 1).map((row) => row[cell]);
-        
         const availableCells = board.filter((row) => row.map((cell) => {cell > 0 || cell <= 9}));
 
-        console.log(availableCells);
-
-
-        // const availableCells = board.filter((row) => row.map((cell) => {
-        //     if (cell > 0 || cell <= 9) {
-        //         console.log(availableCells);
-        //     }}));
-
-        // if (!availableCells.length) return;
-        const cellWithPiece = availableCells
-        cellWithPiece.forEach((row) => {
+        availableCells.forEach((row) => {
             row.forEach((item, index, array) => {
                 if (item === Number(cell)) {
                     array[index] = player;
                 }
             })
         });
-        // const cellWithPiece = board.map((row) => row.map((cell) => board[cell].push(player)));
-        // board[cell].push(player);
-        console.log(cellWithPiece);
     }
 
     const printBoard = () => {
-        
         const boardWithCellValues = board.map((row) => row.map((cell) => cell));
 
         console.log(boardWithCellValues);
-
-        // if (executed === false) {
-        //     const boardWithCellValues = board.map((row) => row.map((cell) => cell.getValue()));
-        //     executed = true;
-        //     let cellNumber = 0;
-        //     boardWithCellValues.forEach(function(item){
-        //         item.forEach(function(cell, index, array){
-        //             if (cell === 0) {
-        //                 array[index] = cellNumber + 1;
-        //                 cellNumber++;
-        //             }
-        //         })         
-        //     });
-        //     for (let i = 0; i < boardWithCellValues.length; i++) {
-        //         console.log(boardWithCellValues[i]);
-        //     }
-        // } else {
-        //     const boardWithCellValues = board.map((row) => row.map((cell) => cell.getValue()));
-        //     console.log(boardWithCellValues);
-        // }
-
-        // const initialPrint = (() => {
-        //     return (() => {
-        //         if (!executed) {
-        //             executed = true;
-        //             let cellNumber = 0;
-        //             boardWithCellValues.forEach(function(item){
-        //                 item.forEach(function(cell, index, array){
-        //                     if (cell === 0) {
-        //                         array[index] = cellNumber + 1;
-        //                         cellNumber++;
-        //                     }
-        //                 })         
-        //             });
-        //             for (let i = 0; i < boardWithCellValues.length; i++) {
-        //                 console.log(boardWithCellValues[i]);
-        //             }
-        //         }
-        //     })();
-        // })();
-
-        
     }
 
     return {
@@ -97,20 +36,20 @@ const gameBoard = () => {
     };
 }
 
-const cell = () => {
-    let value = 1;
+// const cell = () => {
+//     let value = 1;
 
-    const addPiece = (player) => {
-        value = player;
-    }
+//     const addPiece = (player) => {
+//         value = player;
+//     }
 
-    const getValue = () => value;
+//     const getValue = () => value;
 
-    return {
-        addPiece,
-        getValue
-    };
-}
+//     return {
+//         addPiece,
+//         getValue
+//     };
+// }
 
 const gameController = ((
     playerOneName = "Player One",
@@ -118,6 +57,7 @@ const gameController = ((
 ) => {
 
     const board = gameBoard();
+    let previousMove = 0;
 
     const players   = [
         {
@@ -145,8 +85,16 @@ const gameController = ((
 
     const playRound = (cell) => {
         cell = prompt(`${getActivePlayer().name}'s turn.`);
-        console.log(`Dropping ${getActivePlayer().name}'s token into cell ${cell}...`);
-        board.dropPiece(cell, getActivePlayer().piece);
+        if (cell === previousMove) {
+            cell = prompt("Cell already taken\nMake another move")
+            console.log(`Dropping ${getActivePlayer().name}'s token into cell ${cell}...`);
+            board.dropPiece(cell, getActivePlayer().piece);
+        } else {
+            console.log(`Dropping ${getActivePlayer().name}'s token into cell ${cell}...`);
+            board.dropPiece(cell, getActivePlayer().piece);
+        }
+        
+        previousMove = cell;
 
         // win check
 
