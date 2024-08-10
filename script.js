@@ -27,12 +27,43 @@ const gameBoard = () => {
     const printBoard = () => {
         const boardWithCellValues = board.map((row) => row.map((cell) => cell));
 
-        console.log(boardWithCellValues);
+        for (i = 0; i < 3; i++) {
+            console.log(boardWithCellValues[i]);
+        }
+    }
+
+    const winCheck = (playerName, playerPiece, playerWinCheck) => {
+        // Horizontal check
+        if (board[0][0] == playerPiece && board[0][1] == playerPiece && board[0][2] == playerPiece ||
+            board[1][0] == playerPiece && board[1][1] == playerPiece && board[1][2] == playerPiece ||
+            board[2][0] == playerPiece && board[2][1] == playerPiece && board[2][2] == playerPiece
+        ) {
+            console.log(`${playerName} wins`);
+            return playerWinCheck = true;               
+        } 
+        // Vertical check
+        else if (
+            board[0][0] == playerPiece && board[1][0] == playerPiece && board[2][0] == playerPiece ||
+            board[0][1] == playerPiece && board[1][1] == playerPiece && board[2][1] == playerPiece ||
+            board[0][2] == playerPiece && board[1][2] == playerPiece && board[2][2] == playerPiece
+        ) {
+            console.log(`${playerName} wins`);
+            return playerWinCheck = true;            
+        } 
+        // Diagonal check
+        else if (
+            board[0][0] == playerPiece && board[1][1] == playerPiece && board[2][2] == playerPiece ||
+            board[0][2] == playerPiece && board[1][1] == playerPiece && board[2][0] == playerPiece 
+        ) {
+            console.log(`${playerName} wins`);
+            return playerWinCheck = true;            
+        } 
     }
 
     return {
         dropPiece,
-        printBoard
+        printBoard,
+        winCheck
     };
 }
 
@@ -54,7 +85,7 @@ const gameBoard = () => {
 const gameController = ((
     playerOneName = "Player One",
     playerTwoName = "Player Two"
-) => {
+    ) => {
 
     const board = gameBoard();
     let previousMove = 0;
@@ -97,6 +128,9 @@ const gameController = ((
         previousMove = cell;
 
         // win check
+
+        board.winCheck(getActivePlayer().name, getActivePlayer().piece);
+        // console.log(board.winCheck(playerWinCheck));
 
         switchPlayerTurn();
         printNewRound();
