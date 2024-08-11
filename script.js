@@ -129,8 +129,17 @@ const gameController = ((
             playerWinCheck = true;            
         } 
 
-        switchPlayerTurn();
-        printNewRound();
+        if (playerWinCheck === false) {
+            switchPlayerTurn();
+            printNewRound();
+        } else if (playerWinCheck === true) {
+            for (i = 0; i < 3; i++) {
+                console.log(newBoard[i]);
+            }
+            console.log(`${getActivePlayer().name} wins`);
+            console.log("Game Over");
+            return;
+        }
     }
 
     printNewRound();
