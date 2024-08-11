@@ -66,6 +66,7 @@ const gameController = ((
     const board = gameBoard();
     let previousMove = 0;
     newBoard = [];
+    turnCounter = 0;
     let playerWinCheck = false;
 
     const players   = [
@@ -93,6 +94,7 @@ const gameController = ((
     }
 
     const playRound = (cell) => {
+        turnCounter++;
         cell = prompt(`${getActivePlayer().name}'s turn.`);
         if (cell === previousMove) {
             cell = prompt("Cell already taken\nMake another move")
@@ -129,7 +131,14 @@ const gameController = ((
             playerWinCheck = true;            
         } 
 
-        if (playerWinCheck === false) {
+        if (turnCounter == 9) {
+            for (i = 0; i < 3; i++) {
+                console.log(newBoard[i]);
+            }
+            console.log("It's a tie.");
+            console.log("Game Over");
+            return;
+        } else if (playerWinCheck === false) {
             switchPlayerTurn();
             printNewRound();
         } else if (playerWinCheck === true) {
