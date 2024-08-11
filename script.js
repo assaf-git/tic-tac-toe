@@ -12,6 +12,10 @@ const gameBoard = () => {
         };
     }
 
+    const sendBoard = () => {
+        return newBoard = board;
+    }
+
     const dropPiece = (cell, player) => {
         const availableCells = board.filter((row) => row.map((cell) => {cell > 0 || cell <= 9}));
 
@@ -32,38 +36,10 @@ const gameBoard = () => {
         }
     }
 
-    const winCheck = (playerName, playerPiece, playerWinCheck) => {
-        // Horizontal check
-        if (board[0][0] == playerPiece && board[0][1] == playerPiece && board[0][2] == playerPiece ||
-            board[1][0] == playerPiece && board[1][1] == playerPiece && board[1][2] == playerPiece ||
-            board[2][0] == playerPiece && board[2][1] == playerPiece && board[2][2] == playerPiece
-        ) {
-            console.log(`${playerName} wins`);
-            return playerWinCheck = true;               
-        } 
-        // Vertical check
-        else if (
-            board[0][0] == playerPiece && board[1][0] == playerPiece && board[2][0] == playerPiece ||
-            board[0][1] == playerPiece && board[1][1] == playerPiece && board[2][1] == playerPiece ||
-            board[0][2] == playerPiece && board[1][2] == playerPiece && board[2][2] == playerPiece
-        ) {
-            console.log(`${playerName} wins`);
-            return playerWinCheck = true;            
-        } 
-        // Diagonal check
-        else if (
-            board[0][0] == playerPiece && board[1][1] == playerPiece && board[2][2] == playerPiece ||
-            board[0][2] == playerPiece && board[1][1] == playerPiece && board[2][0] == playerPiece 
-        ) {
-            console.log(`${playerName} wins`);
-            return playerWinCheck = true;            
-        } 
-    }
-
     return {
+        sendBoard,
         dropPiece,
         printBoard,
-        winCheck
     };
 }
 
@@ -89,6 +65,8 @@ const gameController = ((
 
     const board = gameBoard();
     let previousMove = 0;
+    newBoard = [];
+    let playerWinCheck = false;
 
     const players   = [
         {
@@ -124,18 +102,37 @@ const gameController = ((
             console.log(`Dropping ${getActivePlayer().name}'s token into cell ${cell}...`);
             board.dropPiece(cell, getActivePlayer().piece);
         }
-        
         previousMove = cell;
 
+        board.sendBoard();
         // win check
-
-        board.winCheck(getActivePlayer().name, getActivePlayer().piece);
-        // console.log(board.winCheck(playerWinCheck));
+        // Horizontal check
+        if (newBoard[0][0] == getActivePlayer().piece && newBoard[0][1] == getActivePlayer().piece && newBoard[0][2] == getActivePlayer().piece ||
+            newBoard[1][0] == getActivePlayer().piece && newBoard[1][1] == getActivePlayer().piece && newBoard[1][2] == getActivePlayer().piece ||
+            newBoard[2][0] == getActivePlayer().piece && newBoard[2][1] == getActivePlayer().piece && newBoard[2][2] == getActivePlayer().piece
+        ) {
+            playerWinCheck = true;
+        } 
+        // Vertical check
+        else if (
+            newBoard[0][0] == getActivePlayer().piece && newBoard[1][0] == getActivePlayer().piece && newBoard[2][0] == getActivePlayer().piece ||
+            newBoard[0][1] == getActivePlayer().piece && newBoard[1][1] == getActivePlayer().piece && newBoard[2][1] == getActivePlayer().piece ||
+            newBoard[0][2] == getActivePlayer().piece && newBoard[1][2] == getActivePlayer().piece && newBoard[2][2] == getActivePlayer().piece
+        ) {
+            playerWinCheck = true;            
+        } 
+        // Diagonal check
+        else if (
+            newBoard[0][0] == getActivePlayer().piece && newBoard[1][1] == getActivePlayer().piece && newBoard[2][2] == getActivePlayer().piece ||
+            newBoard[0][2] == getActivePlayer().piece && newBoard[1][1] == getActivePlayer().piece && newBoard[2][0] == getActivePlayer().piece 
+        ) {
+            playerWinCheck = true;            
+        } 
 
         switchPlayerTurn();
         printNewRound();
     }
 
     printNewRound();
-    playRound();
+    // playRound();
 })();
