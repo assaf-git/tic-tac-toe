@@ -12,6 +12,8 @@ const gameBoard = () => {
         };
     }
 
+    // may be able to simplify to board
+    // change to getBoard
     const sendBoard = () => {
         return newBoard = board;
     }
@@ -36,10 +38,16 @@ const gameBoard = () => {
         }
     }
 
+    // may be irrelevant
+    const getValue = (player) => {
+        value = player;
+    }
+
     return {
         sendBoard,
         dropPiece,
         printBoard,
+        getValue
     };
 }
 
@@ -58,7 +66,7 @@ const gameBoard = () => {
 //     };
 // }
 
-const gameController = ((
+const gameController = (
     playerOneName = "Player One",
     playerTwoName = "Player Two"
     ) => {
@@ -90,7 +98,7 @@ const gameController = ((
     const printNewRound = () => {
         board.printBoard();
         console.log(`${getActivePlayer().name}'s turn.`);
-        playRound();
+        // playRound();
     }
 
     const playRound = (cell) => {
@@ -100,9 +108,11 @@ const gameController = ((
             cell = prompt("Cell already taken\nMake another move")
             console.log(`Dropping ${getActivePlayer().name}'s token into cell ${cell}...`);
             board.dropPiece(cell, getActivePlayer().piece);
+            board.getValue(getActivePlayer().piece); // may be irrelevant
         } else {
             console.log(`Dropping ${getActivePlayer().name}'s token into cell ${cell}...`);
             board.dropPiece(cell, getActivePlayer().piece);
+            board.getValue(getActivePlayer().piece); // may be irrelevant
         }
         previousMove = cell;
 
@@ -151,6 +161,55 @@ const gameController = ((
         }
     }
 
-    printNewRound();
-    // playRound();
+    const getWinCheck = () => playerWinCheck
+
+    // printNewRound();
+
+    // check returned functions
+    return {
+        getActivePlayer,
+        printNewRound,
+        playRound,
+        sendBoard: board.sendBoard,
+        getValue: board.getValue,
+        getWinCheck
+    }
+}
+
+const screenController = (() => {
+    const game = gameController();
+    const playerTurnDiv = document.querySelector('.turn');
+    const boardDiv = document.querySelector('.board');
+
+    console.log(game.getWinCheck());
+
+    while (game.getWinCheck() !== true) {
+        
+        // remove this?
+        game.printNewRound();
+
+        const updateScreen = () => {
+            boardDiv.textContent = "";
+            const board = game.sendBoard();
+            const activePlayer = game.getActivePlayer();
+
+            playerTurnDiv.textContent = `${activePlayer.name}'s turn...`;
+
+            board.forEach(row => {
+                row.forEach((cell, index) => {
+                    const cellButton = document.createElement('button');
+                    cellButton.classList.add('cell');
+
+                    cellButton.dataset.cell = index;
+                    cellButton.textContent =  cell;
+
+                    boardDiv.appendChild(cellButton);
+                })
+            })
+        }
+        updateScreen();
+
+        game.playRound();
+    }
+    
 })();
