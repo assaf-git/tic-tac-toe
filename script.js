@@ -19,7 +19,7 @@ const gameBoard = () => {
     }
 
     const dropPiece = (cell, player) => {
-        const availableCells = board.filter((row) => row.map((cell) => {cell > 0 || cell <= 9}));
+        const availableCells = board.filter((row) => row.map((cell) => {cell > 0 || cell <= 9})); // may have to switch filter and map
 
         availableCells.forEach((row) => {
             row.forEach((item, index, array) => {
@@ -101,9 +101,10 @@ const gameController = (
         // playRound();
     }
 
-    const playRound = (cell) => {
+    const playRound = (selectedCell) => {
         turnCounter++;
-        cell = prompt(`${getActivePlayer().name}'s turn.`);
+        cell = selectedCell;
+        // cell = prompt(`${getActivePlayer().name}'s turn.`);
         if (cell === previousMove) {
             cell = prompt("Cell already taken\nMake another move")
             console.log(`Dropping ${getActivePlayer().name}'s token into cell ${cell}...`);
@@ -183,14 +184,16 @@ const screenController = (() => {
 
     console.log(game.getWinCheck());
 
-    while (game.getWinCheck() !== true) {
+    const board = game.sendBoard();
+
+    // while (game.getWinCheck() !== true) {
         
         // remove this?
-        game.printNewRound();
+        // game.printNewRound();
 
         const updateScreen = () => {
             boardDiv.textContent = "";
-            const board = game.sendBoard();
+            // const board = game.sendBoard();
             const activePlayer = game.getActivePlayer();
 
             playerTurnDiv.textContent = `${activePlayer.name}'s turn...`;
@@ -207,9 +210,26 @@ const screenController = (() => {
                 })
             })
         }
+
+        const clickHandlerBoard = (() => {
+            boardDiv.addEventListener('click', (e) => {
+                
+                // this may be needed once numbers get removed from board
+                // const selectedCell = e.target.dataset.cell;
+
+                const selectedCell = e.target.innerText;
+
+                console.log(selectedCell);
+                // if (!selectedCell) return;
+                game.printNewRound();
+                game.playRound(selectedCell);
+                updateScreen();
+            });
+        })();
+
         updateScreen();
 
-        game.playRound();
-    }
+        // game.playRound();
+    // }
     
 })();
