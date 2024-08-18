@@ -2,13 +2,13 @@ const gameBoard = () => {
     const rows = 3;
     const columns = 3;
     const board = [];
-    let k = 1;
+    let k = 0;
         
     for (i = 0; i < rows; i++) {
         board[i] = [];
         for (j = 0; j < columns; j++) {
             board[i].push(k);
-            k++
+            k++;
         };
     }
 
@@ -186,50 +186,47 @@ const screenController = (() => {
 
     const board = game.sendBoard();
 
-    // while (game.getWinCheck() !== true) {
-        
-        // remove this?
-        // game.printNewRound();
+    const updateScreen = () => {
+        boardDiv.textContent = "";
+        // const board = game.sendBoard();
+        const activePlayer = game.getActivePlayer();
 
-        const updateScreen = () => {
-            boardDiv.textContent = "";
-            // const board = game.sendBoard();
-            const activePlayer = game.getActivePlayer();
+        playerTurnDiv.textContent = `${activePlayer.name}'s turn...`;
 
-            playerTurnDiv.textContent = `${activePlayer.name}'s turn...`;
+        board.forEach(row => {
+            row.forEach((cell, index) => {
+                const cellButton = document.createElement('button');
+                cellButton.classList.add('cell');
 
-            board.forEach(row => {
-                row.forEach((cell, index) => {
-                    const cellButton = document.createElement('button');
-                    cellButton.classList.add('cell');
+                // cellButton.dataset.cell = index;
+                cellButton.textContent =  cell;
+                if (cell >= 0 && cell <= 8) {
+                    cellButton.style.fontSize = 0;
+                }
 
-                    cellButton.dataset.cell = index;
-                    cellButton.textContent =  cell;
-
-                    boardDiv.appendChild(cellButton);
-                })
+                boardDiv.appendChild(cellButton);
             })
-        }
+        })
+    }
 
-        const clickHandlerBoard = (() => {
-            boardDiv.addEventListener('click', (e) => {
-                
-                // this may be needed once numbers get removed from board
-                // const selectedCell = e.target.dataset.cell;
+    const clickHandlerBoard = (() => {
+        boardDiv.addEventListener('click', (e) => {
+            
+            // this may be needed once numbers get removed from board
+            // const selectedCell = e.target.dataset.cell;
 
-                const selectedCell = e.target.innerText;
+            const selectedCell = e.target.innerText;
 
-                console.log(selectedCell);
-                // if (!selectedCell) return;
-                game.printNewRound();
-                game.playRound(selectedCell);
-                updateScreen();
-            });
-        })();
+            console.log(selectedCell);
+            // if (!selectedCell) return;
+            game.printNewRound();
+            game.playRound(selectedCell);
+            updateScreen();
+        });
+    })();
 
-        updateScreen();
+    updateScreen();
 
-        // game.playRound();
-    // }
+    // game.playRound();
     
 })();
