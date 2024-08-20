@@ -19,7 +19,7 @@ const gameBoard = () => {
     }
 
     const dropPiece = (cell, player) => {
-        const availableCells = board.filter((row) => row.map((cell) => {cell > 0 || cell <= 9})); // may have to switch filter and map
+        const availableCells = board.filter((row) => row.map((cell) => cell)); // may have to switch filter and map
 
         availableCells.forEach((row) => {
             row.forEach((item, index, array) => {
@@ -101,19 +101,15 @@ const gameController = (
         // playRound();
     }
 
-    const playRound = (selectedCell) => {
+    const playRound = (cell) => {
         turnCounter++;
-        cell = selectedCell;
-        // cell = prompt(`${getActivePlayer().name}'s turn.`);
-        if (cell === previousMove) {
-            cell = prompt("Cell already taken\nMake another move")
-            console.log(`Dropping ${getActivePlayer().name}'s token into cell ${cell}...`);
-            board.dropPiece(cell, getActivePlayer().piece);
-            board.getValue(getActivePlayer().piece); // may be irrelevant
+        // cell = selectedCell;
+        if (cell === "X" || cell === "O") {
+            console.log("Cell already taken\nMake another move");
+            return;
         } else {
             console.log(`Dropping ${getActivePlayer().name}'s token into cell ${cell}...`);
             board.dropPiece(cell, getActivePlayer().piece);
-            board.getValue(getActivePlayer().piece); // may be irrelevant
         }
         previousMove = cell;
 
