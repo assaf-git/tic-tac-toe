@@ -19,7 +19,7 @@ const gameBoard = () => {
     }
 
     const dropPiece = (cell, player) => {
-        const availableCells = board.filter((row) => row.map((cell) => cell)); // may have to switch filter and map
+        const availableCells = board.filter((row) => row.map((cell) => cell));
 
         availableCells.forEach((row) => {
             row.forEach((item, index, array) => {
@@ -142,7 +142,7 @@ const gameController = (
             for (i = 0; i < 3; i++) {
                 console.log(newBoard[i]);
             }
-            console.log("It's a tie.");
+            console.log("It's a tie."); // *work on this
             console.log("Game Over");
             return;
         } else if (playerWinCheck === false) {
