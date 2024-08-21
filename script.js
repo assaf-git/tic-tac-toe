@@ -102,7 +102,6 @@ const gameController = (
     }
 
     const playRound = (cell) => {
-        turnCounter++;
         // cell = selectedCell;
         if (cell === "X" || cell === "O") {
             console.log("Cell already taken\nMake another move");
@@ -111,10 +110,12 @@ const gameController = (
             console.log(`Dropping ${getActivePlayer().name}'s token into cell ${cell}...`);
             board.dropPiece(cell, getActivePlayer().piece);
         }
-        previousMove = cell;
+
+        // remove this line?
+        // previousMove = cell;
 
         board.sendBoard();
-        // win check
+        // Win check
         // Horizontal check
         if (newBoard[0][0] == getActivePlayer().piece && newBoard[0][1] == getActivePlayer().piece && newBoard[0][2] == getActivePlayer().piece ||
             newBoard[1][0] == getActivePlayer().piece && newBoard[1][1] == getActivePlayer().piece && newBoard[1][2] == getActivePlayer().piece ||
@@ -137,15 +138,20 @@ const gameController = (
         ) {
             playerWinCheck = true;            
         } 
-
-        if (turnCounter == 9) {
-            for (i = 0; i < 3; i++) {
-                console.log(newBoard[i]);
+        // Tie check
+        else {
+            turnCounter++;
+            if (turnCounter == 9) {
+                for (i = 0; i < 3; i++) {
+                    console.log(newBoard[i]);
+                }
+                console.log("It's a tie.");
+                console.log("Game Over");
+                return;
             }
-            console.log("It's a tie."); // *work on this
-            console.log("Game Over");
-            return;
-        } else if (playerWinCheck === false) {
+        } 
+        
+        if (playerWinCheck === false) {
             switchPlayerTurn();
             printNewRound();
         } else if (playerWinCheck === true) {
@@ -155,12 +161,10 @@ const gameController = (
             console.log(`${getActivePlayer().name} wins`);
             console.log("Game Over");
             return;
-        }
+        } 
     }
 
     const getWinCheck = () => playerWinCheck
-
-    // printNewRound();
 
     // check returned functions
     return {
@@ -215,7 +219,7 @@ const screenController = (() => {
 
             console.log(selectedCell);
             // if (!selectedCell) return;
-            game.printNewRound();
+            // game.printNewRound();
             game.playRound(selectedCell);
             updateScreen();
         });
