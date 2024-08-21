@@ -106,6 +106,9 @@ const gameController = (
         if (cell === "X" || cell === "O") {
             console.log("Cell already taken\nMake another move");
             return;
+        } else if (cell.length > 1) {
+            console.log("Invalid move\nTry again");
+            return;
         } else {
             console.log(`Dropping ${getActivePlayer().name}'s token into cell ${cell}...`);
             board.dropPiece(cell, getActivePlayer().piece);
