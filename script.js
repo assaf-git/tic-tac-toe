@@ -138,8 +138,7 @@ const gameController = (
         } 
     }
 
-    // ** THIS
-    // const getWinCheck = () => playerWinCheck
+    const getWinCheck = () => playerWinCheck
 
     // check returned functions
     return {
@@ -147,7 +146,7 @@ const gameController = (
         printNewRound,
         playRound,
         getBoard: board.getBoard,
-        // getWinCheck
+        getWinCheck
     };
 }
 
@@ -181,6 +180,7 @@ const screenController = (() => {
             
             // ** THIS
             // if (playerWinCheck === true || tieWinCheck === true) return;
+            if (game.getWinCheck() === true) return;
 
             const selectedCell = e.target.innerText;
 
