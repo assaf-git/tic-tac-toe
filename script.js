@@ -47,9 +47,9 @@ const gameController = (
     ) => {
 
     const board = gameBoard();
-    // newBoard = [];
     turnCounter = 0;
     let playerWinCheck = false;
+    let playerTieCheck = false;
 
     const players   = [
         {
@@ -119,9 +119,7 @@ const gameController = (
                 }
                 console.log("It's a tie.");
                 console.log("Game Over");
-                return;
-                // ** THIS
-                // return tieWinCheck = true;
+                return playerTieCheck = true;
             }
         } 
         
@@ -138,15 +136,17 @@ const gameController = (
         } 
     }
 
-    const getWinCheck = () => playerWinCheck
+    const getWinCheck = () => playerWinCheck;
 
-    // check returned functions
+    const getTieCheck = () => playerTieCheck;
+
     return {
         getActivePlayer,
         printNewRound,
         playRound,
         getBoard: board.getBoard,
-        getWinCheck
+        getWinCheck,
+        getTieCheck
     };
 }
 
@@ -178,13 +178,10 @@ const screenController = (() => {
     const clickHandlerBoard = (() => {
         boardDiv.addEventListener('click', (e) => {
             
-            // ** THIS
-            // if (playerWinCheck === true || tieWinCheck === true) return;
-            if (game.getWinCheck() === true) return;
+           if (game.getWinCheck() === true || game.getTieCheck() === true) return;
 
             const selectedCell = e.target.innerText;
 
-            // console.log(selectedCell);
             game.playRound(selectedCell);
             updateScreen();
         });
