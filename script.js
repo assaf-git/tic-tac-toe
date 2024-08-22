@@ -9,14 +9,10 @@ const gameBoard = () => {
         for (j = 0; j < columns; j++) {
             board[i].push(k);
             k++;
-        };
+        }
     }
 
-    // may be able to simplify to board
-    // change to getBoard
-    const sendBoard = () => {
-        return newBoard = board;
-    }
+    const getBoard = () => newBoard = board;
 
     const dropPiece = (cell, player) => {
         const availableCells = board.filter((row) => row.map((cell) => cell));
@@ -38,33 +34,12 @@ const gameBoard = () => {
         }
     }
 
-    // may be irrelevant
-    const getValue = (player) => {
-        value = player;
-    }
-
     return {
-        sendBoard,
+        getBoard,
         dropPiece,
-        printBoard,
-        getValue
+        printBoard
     };
 }
-
-// const cell = () => {
-//     let value = 1;
-
-//     const addPiece = (player) => {
-//         value = player;
-//     }
-
-//     const getValue = () => value;
-
-//     return {
-//         addPiece,
-//         getValue
-//     };
-// }
 
 const gameController = (
     playerOneName = "Player One",
@@ -72,8 +47,7 @@ const gameController = (
     ) => {
 
     const board = gameBoard();
-    let previousMove = 0;
-    newBoard = [];
+    // newBoard = [];
     turnCounter = 0;
     let playerWinCheck = false;
 
@@ -98,11 +72,9 @@ const gameController = (
     const printNewRound = () => {
         board.printBoard();
         console.log(`${getActivePlayer().name}'s turn.`);
-        // playRound();
     }
 
     const playRound = (cell) => {
-        // cell = selectedCell;
         if (cell === "X" || cell === "O") {
             console.log("Cell already taken\nMake another move");
             return;
@@ -114,19 +86,16 @@ const gameController = (
             board.dropPiece(cell, getActivePlayer().piece);
         }
 
-        // remove this line?
-        // previousMove = cell;
+        board.getBoard();
 
-        board.sendBoard();
-        // Win check
-        // Horizontal check
+        // Horizontal win check
         if (newBoard[0][0] == getActivePlayer().piece && newBoard[0][1] == getActivePlayer().piece && newBoard[0][2] == getActivePlayer().piece ||
             newBoard[1][0] == getActivePlayer().piece && newBoard[1][1] == getActivePlayer().piece && newBoard[1][2] == getActivePlayer().piece ||
             newBoard[2][0] == getActivePlayer().piece && newBoard[2][1] == getActivePlayer().piece && newBoard[2][2] == getActivePlayer().piece
         ) {
             playerWinCheck = true;
         } 
-        // Vertical check
+        // Vertical win check
         else if (
             newBoard[0][0] == getActivePlayer().piece && newBoard[1][0] == getActivePlayer().piece && newBoard[2][0] == getActivePlayer().piece ||
             newBoard[0][1] == getActivePlayer().piece && newBoard[1][1] == getActivePlayer().piece && newBoard[2][1] == getActivePlayer().piece ||
@@ -134,7 +103,7 @@ const gameController = (
         ) {
             playerWinCheck = true;            
         } 
-        // Diagonal check
+        // Diagonal win check
         else if (
             newBoard[0][0] == getActivePlayer().piece && newBoard[1][1] == getActivePlayer().piece && newBoard[2][2] == getActivePlayer().piece ||
             newBoard[0][2] == getActivePlayer().piece && newBoard[1][1] == getActivePlayer().piece && newBoard[2][0] == getActivePlayer().piece 
@@ -151,6 +120,8 @@ const gameController = (
                 console.log("It's a tie.");
                 console.log("Game Over");
                 return;
+                // ** THIS
+                // return tieWinCheck = true;
             }
         } 
         
@@ -167,17 +138,17 @@ const gameController = (
         } 
     }
 
-    const getWinCheck = () => playerWinCheck
+    // ** THIS
+    // const getWinCheck = () => playerWinCheck
 
     // check returned functions
     return {
         getActivePlayer,
         printNewRound,
         playRound,
-        sendBoard: board.sendBoard,
-        getValue: board.getValue,
-        getWinCheck
-    }
+        getBoard: board.getBoard,
+        // getWinCheck
+    };
 }
 
 const screenController = (() => {
@@ -185,28 +156,21 @@ const screenController = (() => {
     const playerTurnDiv = document.querySelector('.turn');
     const boardDiv = document.querySelector('.board');
 
-    console.log(game.getWinCheck());
-
-    const board = game.sendBoard();
+    const board = game.getBoard();
 
     const updateScreen = () => {
         boardDiv.textContent = "";
-        // const board = game.sendBoard();
         const activePlayer = game.getActivePlayer();
-
         playerTurnDiv.textContent = `${activePlayer.name}'s turn...`;
 
         board.forEach(row => {
             row.forEach((cell, index) => {
                 const cellButton = document.createElement('button');
                 cellButton.classList.add('cell');
-
-                // cellButton.dataset.cell = index;
                 cellButton.textContent =  cell;
                 if (cell >= 0 && cell <= 8) {
                     cellButton.style.fontSize = 0;
                 }
-
                 boardDiv.appendChild(cellButton);
             })
         })
@@ -215,14 +179,12 @@ const screenController = (() => {
     const clickHandlerBoard = (() => {
         boardDiv.addEventListener('click', (e) => {
             
-            // this may be needed once numbers get removed from board
-            // const selectedCell = e.target.dataset.cell;
+            // ** THIS
+            // if (playerWinCheck === true || tieWinCheck === true) return;
 
             const selectedCell = e.target.innerText;
 
-            console.log(selectedCell);
-            // if (!selectedCell) return;
-            // game.printNewRound();
+            // console.log(selectedCell);
             game.playRound(selectedCell);
             updateScreen();
         });
@@ -230,6 +192,4 @@ const screenController = (() => {
 
     updateScreen();
 
-    // game.playRound();
-    
 })();
