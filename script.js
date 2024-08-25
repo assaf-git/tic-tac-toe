@@ -4,14 +4,17 @@ const gameBoard = () => {
     const board = [];
     let k = 0;
     
-    // 2D array loop
-    for (i = 0; i < rows; i++) {
-        board[i] = [];
-        for (j = 0; j < columns; j++) {
-            board[i].push(k); // Allocates numbers to cells
-            k++;
+    // Builds 2D array
+    const arrayBuilder = () => {
+        for (i = 0; i < rows; i++) {
+            board[i] = [];
+            for (j = 0; j < columns; j++) {
+                board[i].push(k); // Allocates numbers to cells
+                k++;
+            }
         }
-    }
+        if (k === 9) k = 0; // Resets cell numbering
+    };
 
     // Sends board array
     const getBoard = () => newBoard = board;
@@ -39,6 +42,7 @@ const gameBoard = () => {
     }
 
     return {
+        arrayBuilder,
         getBoard,
         dropPiece,
         printBoard
@@ -53,7 +57,7 @@ const gameController = (
     const board = gameBoard(); 
     
     let gameStatus;
-    turnCounter = 0;
+    let turnCounter = 0;
     let playerWinCheck = false;
     let playerTieCheck = false;
 
@@ -78,12 +82,14 @@ const gameController = (
     // Sends current player
     const getActivePlayer = () => activePlayer;
 
+    // Executes creation of 2d array
+    board.arrayBuilder();
+
     // Prints updated board array of each round
     const printNewRound = () => {
         board.printBoard();
         console.log(`${getActivePlayer().name}'s turn.`);
     }
-
 
     const playRound = (cell) => {
         // Checks if player selection already contains a player value
@@ -141,13 +147,12 @@ const gameController = (
             }
         } 
         
-        // Identifies no winner yet
-        // Switches players & updates round
+        // Switches players if no winner identified
         if (playerWinCheck === false) {
             switchPlayerTurn();
             printNewRound();
-        } // Identifies winner and ends function execution
-        else if (playerWinCheck === true) {
+        // Identifies winner and ends function execution
+        } else if (playerWinCheck === true) {
             for (i = 0; i < 3; i++) {
                 console.log(newBoard[i]);
             }
@@ -157,21 +162,50 @@ const gameController = (
         } 
     }
 
-    // Sends game status variable
-    const getGameStatus = () => gameStatus;
+    // Sends & receives game status variable
+    const getGameStatus = (arg) => {
+        if (arg === undefined) {
+            return gameStatus;
+        } else {
+            return gameStatus = arg;
+        }
+    }
 
-    // Sends win check variable
-    const getWinCheck = () => playerWinCheck;
+    // Sends & receives turn counter variable
+    const getTurnCounter = (arg) => {
+        if (arg === undefined) {
+            return turnCounter;
+        } else {
+            return turnCounter = arg;
+        }
+    }
 
-    // Sends tie check variable
-    const getTieCheck = () => playerTieCheck;
+    // Sends & receives win check variable
+    const getWinCheck = (arg) => {
+        if (arg === undefined) {
+            return playerWinCheck;
+        } else {
+            return playerWinCheck = arg;
+        }
+    }
+    // Sends & receives tie check variable
+    const getTieCheck = (arg) => {
+        if (arg === undefined) {
+            return playerTieCheck;
+        } else {
+            return playerTieCheck = arg;
+        }
+    }
 
     return {
+        switchPlayerTurn,
         getActivePlayer,
         printNewRound,
         playRound,
+        arrayBuilder: board.arrayBuilder,
         getBoard: board.getBoard,
         getGameStatus,
+        getTurnCounter,
         getWinCheck,
         getTieCheck
     };
@@ -181,6 +215,7 @@ const screenController = (() => {
     const boardDiv = document.querySelector('.board');
     const playerTurnDiv = document.querySelector('.turn');
     const gameStatusDiv = document.querySelector('.game-status');
+    const restartButton = document.querySelector('.restart');
 
     // Creates gameController function variable and executes gameBoard factory function
     const game = gameController();
@@ -191,24 +226,32 @@ const screenController = (() => {
 
     // Refreshes board with updated selection
     const updateScreen = () => {
+        winCheck = game.getWinCheck();
+        tieCheck = game.getTieCheck();
         boardDiv.textContent = "";
         const activePlayer = game.getActivePlayer();
-        if (game.getWinCheck() === true || game.getTieCheck() === true) {
-            playerTurnDiv.textContent = "";    
-        } else {
+        // Runs if there is no win & no tie
+        if (winCheck === false && tieCheck === false) {
             playerTurnDiv.textContent = `${activePlayer.name}'s turn...`; // Displays current player's name
+            gameStatusDiv.textContent = game.getGameStatus(); // Displays current game status
+            gameStatusTimer = setTimeout(() => { // Sets game status timeout
+                gameStatusDiv.textContent = "";
+            }, 3000);
+        // Runs if there is a win or a tie
+        } else if (winCheck === true || tieCheck === true) {
+            playerTurnDiv.textContent = ""; // Removes display of current player's turn if game over
+            gameStatusDiv.textContent = game.getGameStatus(); // Displays current game status
+            gameStatusTimer = setTimeout(() => { // Sets game status timeout
+                gameStatusDiv.textContent = "";
+            }, 3000);
         }
-        gameStatusDiv.textContent = game.getGameStatus(); // Displays current game status
-        gameStatusTimer = setTimeout(() => { // Sets game status timeout
-            gameStatusDiv.textContent = "";
-        }, 3000);
 
         // Creates button element for each cell
         board.forEach(row => {
-            row.forEach((cell, index) => {
+            row.forEach((cell) => {
                 const cellButton = document.createElement('button');
                 cellButton.classList.add('cell');
-                cellButton.textContent =  cell;
+                cellButton.textContent = cell;
                 if (cell >= 0 && cell <= 8) {
                     cellButton.style.fontSize = 0;
                 }
@@ -225,8 +268,9 @@ const screenController = (() => {
             clearTimeout(gameStatusTimer);
 
             // Stops event listener once game over
-            if (game.getWinCheck() === true || game.getTieCheck() === true) return;
-
+            if (winCheck === true || tieCheck === true) {
+                return;
+            }
             // 'Sees' selected cell
             const selectedCell = e.target.innerText;
 
@@ -234,6 +278,18 @@ const screenController = (() => {
             updateScreen();
         });
     })();
+
+    restartButton.addEventListener('click', () => {
+        board.length = 0;
+        game.arrayBuilder();
+        game.printNewRound();
+        game.switchPlayerTurn();
+        game.getGameStatus("");
+        game.getTurnCounter(0);
+        game.getWinCheck(false);
+        game.getTieCheck(false);
+        updateScreen();
+    })
 
     updateScreen();
 
