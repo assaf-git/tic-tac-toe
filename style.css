@@ -7,10 +7,14 @@
 
 .turn {
     height: 20px;
+    padding-top: 10px;
 }
 
 .game-status {
-    height: 20px;
+    height: 40px;
+    margin-top: 0;
+    white-space: pre;
+    text-align: center;
 }
 
 .board {
