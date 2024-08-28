@@ -49,10 +49,7 @@ const gameBoard = () => {
     };
 }
 
-const gameController = (
-    playerOneName = "Player One",
-    playerTwoName = "Player Two"
-    ) => {
+const gameController = (playerOneName, playerTwoName) => {
     // Creates gameBoard function variable and executes gameBoard factory function
     const board = gameBoard(); 
     
@@ -217,8 +214,14 @@ const screenController = (() => {
     const gameStatusDiv = document.querySelector('.game-status');
     const restartButton = document.querySelector('.restart');
 
+    // Prompts user/s to input name
+    let playerOneInput = prompt("Name?", "Player One");
+    let playerTwoInput = prompt("Name?", "Player Two");
+    if (playerOneInput === null) playerOneInput = "Player One";
+    if (playerTwoInput === null) playerTwoInput = "Player Two";
+
     // Creates gameController function variable and executes gameBoard factory function
-    const game = gameController();
+    const game = gameController(playerOneInput, playerTwoInput);
     // Brings board array into current function
     const board = game.getBoard();
 
@@ -237,8 +240,8 @@ const screenController = (() => {
             gameStatusTimer = setTimeout(() => { // Sets game status timeout
                 gameStatusDiv.textContent = "";
             }, 3000);
-        // Runs if there is a win or a tie
-        } else if (winCheck === true || tieCheck === true) {
+        }  // Runs if there is a win or a tie
+        else if (winCheck === true || tieCheck === true) {
             playerTurnDiv.textContent = ""; // Removes display of current player's turn if game over
             gameStatusDiv.textContent = game.getGameStatus(); // Displays current game status
             gameStatusTimer = setTimeout(() => { // Sets game status timeout
